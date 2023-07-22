@@ -13,7 +13,8 @@ import com.luojunkai.app.R
 
 class generalAdapter(
     private val generallist: ArrayList<general>,
-    private val generalDao: generalDao
+    private val generalDao: generalDao,
+    private val generalViewModel: generalViewModel
 ) : RecyclerView.Adapter<generalAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -32,7 +33,7 @@ class generalAdapter(
 
         // 在数据库中插入新的 general 对象
         Thread {
-            generalDao.insertGeneral(general)
+            generalViewModel.insertGeneral(general)
         }.start()
     }
 
@@ -69,7 +70,7 @@ class generalAdapter(
         // 点击事件保存 general 到数据库
         holder.itemView.setOnClickListener {
             // 将 General 对象插入到数据库中
-            generalDao.insertGeneral(general)
+            generalViewModel.insertGeneral(general)
 
             notifyDataSetChanged() // 更新适配器
         }
