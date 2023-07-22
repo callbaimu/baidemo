@@ -1,6 +1,5 @@
 package com.luojunkai.app.general
 
-import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +13,7 @@ import com.luojunkai.app.R
 
 class generalAdapter(
     private val generallist: ArrayList<general>,
-    private val generalDao: generalDao,
-    private val generalViewModel: GeneralViewModel
+    private val generalDao: generalDao
 ) : RecyclerView.Adapter<generalAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -32,10 +30,11 @@ class generalAdapter(
         generallist.add(0, general) // 添加到列表头部，使新内容在最上方
         notifyDataSetChanged() // 更新适配器
 
-        // 在ViewModel中执行数据库插入操作
-        generalViewModel.insertGeneral(general)
+        // 在数据库中插入新的 general 对象
+        Thread {
+            generalDao.insertGeneral(general)
+        }.start()
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -69,16 +68,10 @@ class generalAdapter(
 
         // 点击事件保存 general 到数据库
         holder.itemView.setOnClickListener {
-            // 异步任务执行数据库操作
-            InsertAsyncTask(generalDao).execute(general)
-        }
-    }
-    // 定义异步任务类
-    private class InsertAsyncTask(private val dao: generalDao) : AsyncTask<general, Void, Void>() {
-        override fun doInBackground(vararg params: general): Void? {
-            // 执行数据库插入操作
-            dao.insertGeneral(params[0])
-            return null
+            // 将 General 对象插入到数据库中
+            generalDao.insertGeneral(general)
+
+            notifyDataSetChanged() // 更新适配器
         }
     }
 }
