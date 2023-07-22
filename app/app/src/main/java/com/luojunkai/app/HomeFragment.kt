@@ -28,6 +28,7 @@ import com.luojunkai.app.general.generalDatabase
 import com.luojunkai.app.key.key
 import com.luojunkai.app.key.keyAdapter
 import com.luojunkai.app.home.HomeViewModel
+import androidx.fragment.app.viewModels
 
 
 class HomeFragment : Fragment() {
