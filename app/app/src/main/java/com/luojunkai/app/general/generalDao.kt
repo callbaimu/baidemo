@@ -11,5 +11,5 @@ interface generalDao {
     fun getAllGenerals(): List<general>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertGeneral(general: general)
+    fun insertGeneral(general: general)
 }
