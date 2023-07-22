@@ -1,5 +1,6 @@
 package com.luojunkai.app.general
 
+import android.os.AsyncTask
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,6 +11,6 @@ interface generalDao {
     @Query("SELECT * FROM general")
     fun getAllGenerals(): List<general>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     fun insertGeneral(general: general)
 }

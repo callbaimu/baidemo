@@ -1,5 +1,6 @@
 package com.luojunkai.app.general
 
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,10 +32,9 @@ class generalAdapter(
         notifyDataSetChanged() // 更新适配器
 
         // 在数据库中插入新的 general 对象
-        Thread {
-            generalDao.insertGeneral(general)
-        }.start()
+        InsertAsyncTask(generalDao).execute(general)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
@@ -68,10 +68,16 @@ class generalAdapter(
 
         // 点击事件保存 general 到数据库
         holder.itemView.setOnClickListener {
-            // 将 General 对象插入到数据库中
-            generalDao.insertGeneral(general)
-
-            notifyDataSetChanged() // 更新适配器
+            // 异步任务执行数据库操作
+            InsertAsyncTask(generalDao).execute(general)
+        }
+    }
+    // 定义异步任务类
+    private class InsertAsyncTask(private val dao: generalDao) : AsyncTask<general, Void, Void>() {
+        override fun doInBackground(vararg params: general): Void? {
+            // 执行数据库插入操作
+            dao.insertGeneral(params[0])
+            return null
         }
     }
 }
