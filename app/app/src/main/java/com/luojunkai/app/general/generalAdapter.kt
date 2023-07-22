@@ -14,7 +14,8 @@ import com.luojunkai.app.R
 
 class generalAdapter(
     private val generallist: ArrayList<general>,
-    private val generalDao: generalDao
+    private val generalDao: generalDao,
+    private val generalViewModel: GeneralViewModel
 ) : RecyclerView.Adapter<generalAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -31,8 +32,8 @@ class generalAdapter(
         generallist.add(0, general) // 添加到列表头部，使新内容在最上方
         notifyDataSetChanged() // 更新适配器
 
-        // 在数据库中插入新的 general 对象
-        InsertAsyncTask(generalDao).execute(general)
+        // 在ViewModel中执行数据库插入操作
+        generalViewModel.insertGeneral(general)
     }
 
 

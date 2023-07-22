@@ -1,7 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt' // Make sure this line is added
+    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.android'// Make sure this line is added
 }
 
 
@@ -44,6 +45,7 @@ android {
 apply plugin: 'kotlin-kapt'
 
 dependencies {
+    implementation 'androidx.core:core-ktx:+'
     def media3_version = "1.0.0-rc01"
     // For media playback using ExoPlayer
     implementation "androidx.media3:media3-exoplayer:$media3_version"
