@@ -76,6 +76,7 @@ class HomeFragment : Fragment() {
         initgeneral()
 
         // 使用我们创建的Factory来实例化generalViewModel
+        val generalViewModel: generalViewModel by viewModels()
         generalAdapter = generalAdapter(generallist, generalDao, generalViewModel)
 
 
@@ -140,9 +141,7 @@ class HomeFragment : Fragment() {
                 source = from ?: "",
                 imageUrl = mantleImageUrl ?: ""
             )
-
-            // 将新的 general 对象插入数据库，并更新 generallist
-            generalAdapter.insertGeneral(newGeneral)
+            insertGeneralToDatabase(newGeneral)
         }
     }
 

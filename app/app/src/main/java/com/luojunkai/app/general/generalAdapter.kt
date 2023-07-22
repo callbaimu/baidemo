@@ -14,7 +14,7 @@ import com.luojunkai.app.R
 class generalAdapter(
     private val generallist: ArrayList<general>,
     private val generalDao: generalDao,
-    private val generalViewModel: generalViewModel
+    private val generalViewModel: generalViewModel // 移除初始化
 ) : RecyclerView.Adapter<generalAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -74,5 +74,10 @@ class generalAdapter(
 
             notifyDataSetChanged() // 更新适配器
         }
+    }
+    fun updateGenerals(newGenerals: List<general>) {
+        generallist.clear()
+        generallist.addAll(newGenerals)
+        notifyDataSetChanged()
     }
 }
