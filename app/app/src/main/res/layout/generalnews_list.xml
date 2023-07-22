@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:background="@drawable/radius_border">
+
+    <ImageView
+        android:id="@+id/tv_cover"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tv_keycontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="标题"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_cover" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="249dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="内容xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        android:textSize="16dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintStart_toStartOf="@+id/tv_keycontent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_keycontent" />
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="12dp"
+        android:text="热点"
+        android:textColor="#ff0000"
+        app:layout_constraintStart_toEndOf="@+id/tv_fire"
+        app:layout_constraintTop_toTopOf="@+id/tv_fire" />
+
+    <TextView
+        android:id="@+id/tv_from"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="12dp"
+        android:text="XXX新闻网"
+        android:textColor="#FF0000"
+        app:layout_constraintStart_toEndOf="@+id/tv_tip"
+        app:layout_constraintTop_toTopOf="@+id/tv_tip" />
+
+    <ImageView
+        android:id="@+id/tv_fire"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
+        app:layout_constraintVertical_bias="0.448"
+        app:srcCompat="@drawable/ic_fire" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

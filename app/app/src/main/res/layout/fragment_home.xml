@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0FFFF">
+
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminateDuration="300"
+        android:indeterminateDrawable="@drawable/load_rotation"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="晴"
+            android:textSize="11sp"
+            app:layout_constraintStart_toEndOf="@+id/city"
+            app:layout_constraintTop_toTopOf="@+id/city" />
+
+        <ImageView
+            android:id="@+id/weatherimage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/image"
+            app:layout_constraintStart_toStartOf="@id/image"
+            app:layout_constraintTop_toTopOf="@id/image"
+            app:srcCompat="@drawable/ic_clear_day" />
+
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="38℃"
+            app:layout_constraintBottom_toBottomOf="@id/image"
+            app:layout_constraintStart_toStartOf="@+id/air"
+            app:layout_constraintTop_toBottomOf="@+id/air"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/air"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="空气"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@+id/city"
+            app:layout_constraintTop_toBottomOf="@+id/city" />
+
+        <TextView
+            android:id="@+id/airquality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="良"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@+id/weather"
+            app:layout_constraintTop_toBottomOf="@+id/city" />
+
+        <ImageView
+            android:id="@+id/msetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="showPopupMenu"
+            android:src="@drawable/ic_settings"
+            app:layout_constraintEnd_toEndOf="@id/image"
+            app:layout_constraintTop_toTopOf="@id/image" />
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:text="重庆市"
+            android:textSize="11sp"
+            app:layout_constraintStart_toEndOf="@+id/weatherimage"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/searchbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image">
+
+            <ImageView
+            android:id="@+id/logo"
+            android:layout_width="25dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="116dp"
+            android:clickable="true"
+            android:onClick="onImageClick"
+            app:layout_constraintEnd_toEndOf="@id/searchbar"
+            app:layout_constraintStart_toStartOf="@id/searchbar"
+            app:layout_constraintTop_toTopOf="@id/searchbar"
+            app:srcCompat="@drawable/ic_logo" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="409dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/textInputEditText"
+            app:layout_constraintEnd_toEndOf="@id/textInputEditText"
+            app:layout_constraintStart_toStartOf="@id/textInputEditText"
+            app:layout_constraintTop_toTopOf="@id/textInputEditText" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="search"
+            app:layout_constraintBottom_toBottomOf="@+id/searchbar"
+            app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/newslist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="50dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hotspot"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toTopOf="@+id/newslist"
+            app:layout_constraintStart_toStartOf="@id/newslist"
+            app:layout_constraintEnd_toEndOf="@id/newslist"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/general"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:layout_constraintStart_toStartOf="@id/newslist"
+            app:layout_constraintEnd_toEndOf="@id/newslist"
+            app:layout_constraintTop_toBottomOf="@id/hotspot"
+            app:layout_constraintBottom_toBottomOf="@id/newslist"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
