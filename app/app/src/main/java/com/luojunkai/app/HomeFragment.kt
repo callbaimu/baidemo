@@ -27,6 +27,8 @@ import com.luojunkai.app.general.generalDao
 import com.luojunkai.app.general.generalDatabase
 import com.luojunkai.app.key.key
 import com.luojunkai.app.key.keyAdapter
+import com.luojunkai.app.home.HomeViewModel
+
 
 class HomeFragment : Fragment() {
     private val keylist = ArrayList<key>()
