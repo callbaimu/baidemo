@@ -15,8 +15,12 @@ import android.widget.PopupMenu
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.luojunkai.app.databinding.FragmentHomeBinding
+import com.luojunkai.app.general.GeneralViewModel
 import com.luojunkai.app.general.general
 import com.luojunkai.app.general.generalAdapter
 import com.luojunkai.app.general.generalDao
@@ -32,12 +36,15 @@ class HomeFragment : Fragment() {
     private lateinit var generalAdapter: generalAdapter
     private lateinit var generalDao: generalDao
     private val ADD_NEWS_REQUEST_CODE = 101
+    private lateinit var homeBinding: FragmentHomeBinding
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        homeBinding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         val i_view = view.findViewById<ImageView>(R.id.weatherimage)
@@ -70,7 +77,15 @@ class HomeFragment : Fragment() {
 
         // 初始化generallist并从数据库中加载数据
         initgeneral()
-        generalAdapter = generalAdapter(generallist, generalDao) // Use generalDao instead of generalDatabase
+        // 获取数据库实例
+        val generalDao: generalDao = generalDatabase.getInstance(requireContext()).generalDao()
+
+        // 创建GeneralViewModel实例并传递generalDao
+        val generalViewModel = ViewModelProvider(this, GeneralViewModelFactory(generalDao)).get(
+            GeneralViewModel::class.java)
+
+        // 初始化generalAdapter时传递generalViewModel
+        generalAdapter = generalAdapter(homeViewModel.generallist, generalViewModel)
 
         val generallayoutManager = LinearLayoutManager(requireContext())
         val generalrecyclerView: RecyclerView = view.findViewById(R.id.general)
@@ -191,4 +206,5 @@ class HomeFragment : Fragment() {
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
+    return homeBinding.root
 }
