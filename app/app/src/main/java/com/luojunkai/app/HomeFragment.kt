@@ -21,6 +21,7 @@ import com.luojunkai.app.general.general
 import com.luojunkai.app.general.generalAdapter
 import com.luojunkai.app.general.generalDao
 import com.luojunkai.app.general.generalDatabase
+import com.luojunkai.app.general.generalViewModel
 import com.luojunkai.app.key.key
 import com.luojunkai.app.key.keyAdapter
 
@@ -31,6 +32,7 @@ class HomeFragment : Fragment() {
     private lateinit var msetting: ImageView
     private lateinit var generalAdapter: generalAdapter
     private lateinit var generalDao: generalDao
+    private lateinit var generalViewModel: generalViewModel
     private val ADD_NEWS_REQUEST_CODE = 101
 
     override fun onCreateView(
@@ -146,7 +148,7 @@ class HomeFragment : Fragment() {
 
         // 在数据库中插入新的general对象
         Thread {
-            generalDao.insertGeneral(general)
+            generalViewModel.insertGeneral(general)
         }.start()
     }
 
