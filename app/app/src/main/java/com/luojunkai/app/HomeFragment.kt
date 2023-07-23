@@ -23,6 +23,11 @@ import com.luojunkai.app.general.generalDao
 import com.luojunkai.app.general.generalDatabase
 import com.luojunkai.app.key.key
 import com.luojunkai.app.key.keyAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
     private val keylist = ArrayList<key>()
@@ -70,8 +75,7 @@ class HomeFragment : Fragment() {
 
         // 初始化generallist并从数据库中加载数据
         initgeneral()
-        generalAdapter = generalAdapter(generallist, generalDao) // Use generalDao instead of generalDatabase
-
+        generalAdapter = generalAdapter(generallist, generalDao)
         val generallayoutManager = LinearLayoutManager(requireContext())
         val generalrecyclerView: RecyclerView = view.findViewById(R.id.general)
         generalrecyclerView.layoutManager = generallayoutManager
@@ -96,16 +100,19 @@ class HomeFragment : Fragment() {
     }
 
     private fun initgeneral() {
-        // 从数据库中加载数据到 generallist
-        Thread {
-            val generalListFromDB = generalDao.getAllGenerals()
-            generallist.addAll(generalListFromDB)
-            // 更新 RecyclerView
-            activity?.runOnUiThread {
-                generalAdapter.notifyDataSetChanged()
+        // 从数据库中加载数据到 generallist，仅加载一次数据
+        if (generallist.isEmpty()) {
+            // 使用 CoroutineScope 替代 GlobalScope，方便取消任务
+            CoroutineScope(Dispatchers.IO).launch {
+                val generalListFromDB = generalDao.getAllGenerals()
+                withContext(Dispatchers.Main) {
+                    generallist.addAll(generalListFromDB)
+                    generalAdapter.notifyDataSetChanged()
+                }
             }
-        }.start()
+        }
     }
+
 
     // 启动AddNewsActivity
     private fun startAddNewsActivity() {
@@ -135,19 +142,13 @@ class HomeFragment : Fragment() {
             )
 
             // 将新的 general 对象插入数据库，并更新 generallist
-            generalAdapter.insertGeneral(newGeneral)
+            GlobalScope.launch(Dispatchers.IO) {
+                generalDao.insertGeneral(newGeneral)
+                withContext(Dispatchers.Main) {
+                    generalAdapter.insertGeneralAtTop(newGeneral)
+                }
+            }
         }
-    }
-
-    // 将新的general对象插入数据库，并添加到generallist列表中
-    private fun insertGeneralToDatabase(general: general) {
-        generallist.add(0, general) // 添加到列表头部，使新内容在最上方
-        generalAdapter.notifyDataSetChanged() // 更新适配器
-
-        // 在数据库中插入新的general对象
-        Thread {
-            generalDao.insertGeneral(general)
-        }.start()
     }
 
 

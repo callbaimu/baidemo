@@ -138,6 +138,7 @@ class InformationActivity : AppCompatActivity() {
                     "com.luojunkai.app.fileprovider",  // 这里需要替换为你的 FileProvider authority
                     it
                 )
+                capturedImageUri = photoURI // 将图片的 URI 设置给 capturedImageUri 变量
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                 takePictureLauncher.launch(intent)
             }
@@ -145,6 +146,7 @@ class InformationActivity : AppCompatActivity() {
             Log.d("DEBUG", "No camera app found")
         }
     }
+
 
     // 创建用于保存照片的临时文件
     private fun createImageFile(): File {
@@ -175,13 +177,14 @@ class InformationActivity : AppCompatActivity() {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_PICK || requestCode == REQUEST_IMAGE_CAPTURE) {
                 // 处理从相册选择或拍照的图片
-                val imageUri: Uri? = data?.data
+                // 使用 capturedImageUri 获取拍照后的图片 URI
+                val imageUri: Uri? = capturedImageUri
                 // 在这里你可以将头像设置为选择的图片
                 if (imageUri != null) {
                     binding.avatar.setImageURI(imageUri)
 
-                    // 将图片的 URI 设置给 capturedImageUri 变量
-                    capturedImageUri = imageUri
+                    // 将图片的 URI 设置给 capturedImageUri 变量（此处已在 openCamera 方法中设置，此处可忽略）
+                    // capturedImageUri = imageUri
 
                     // 将头像地址保存到 Room 数据库
                     lifecycleScope.launch(Dispatchers.IO) {
@@ -197,4 +200,5 @@ class InformationActivity : AppCompatActivity() {
             }
         }
     }
+
 }
