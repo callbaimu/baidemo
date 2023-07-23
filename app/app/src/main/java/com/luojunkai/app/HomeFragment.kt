@@ -15,15 +15,12 @@ import android.widget.PopupMenu
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.luojunkai.app.general.general
 import com.luojunkai.app.general.generalAdapter
 import com.luojunkai.app.general.generalDao
 import com.luojunkai.app.general.generalDatabase
-import com.luojunkai.app.general.generalViewModel
 import com.luojunkai.app.key.key
 import com.luojunkai.app.key.keyAdapter
 
@@ -34,7 +31,6 @@ class HomeFragment : Fragment() {
     private lateinit var msetting: ImageView
     private lateinit var generalAdapter: generalAdapter
     private lateinit var generalDao: generalDao
-    private val generalViewModel: generalViewModel by viewModels()
     private val ADD_NEWS_REQUEST_CODE = 101
 
     override fun onCreateView(
@@ -74,11 +70,7 @@ class HomeFragment : Fragment() {
 
         // 初始化generallist并从数据库中加载数据
         initgeneral()
-
-        // 使用我们创建的Factory来实例化generalViewModel
-        val generalViewModel: generalViewModel by viewModels()
-        generalAdapter = generalAdapter(generallist, generalDao, generalViewModel)
-
+        generalAdapter = generalAdapter(generallist, generalDao) // Use generalDao instead of generalDatabase
 
         val generallayoutManager = LinearLayoutManager(requireContext())
         val generalrecyclerView: RecyclerView = view.findViewById(R.id.general)
@@ -141,7 +133,9 @@ class HomeFragment : Fragment() {
                 source = from ?: "",
                 imageUrl = mantleImageUrl ?: ""
             )
-            insertGeneralToDatabase(newGeneral)
+
+            // 将新的 general 对象插入数据库，并更新 generallist
+            generalAdapter.insertGeneral(newGeneral)
         }
     }
 
@@ -152,7 +146,7 @@ class HomeFragment : Fragment() {
 
         // 在数据库中插入新的general对象
         Thread {
-            generalViewModel.insertGeneral(general)
+            generalDao.insertGeneral(general)
         }.start()
     }
 

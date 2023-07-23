@@ -51,15 +51,14 @@ class VideoFragment : Fragment(), videopreviewAdapter.OnItemClickListener {
                 videopreview(
                     "Natural",
                     "https://lmg.jj20.com/up/allimg/1115/092621094155/210926094155-7-1200.jpg",
-                    "https://media.w3.org/2010/05/sintel/trailer.mp4"
+                    "http://vjs.zencdn.net/v/oceans.mp4"
                 )
             )
             videopreviewlist.add(
                 videopreview(
                     "Dragon",
                     "https://lmg.jj20.com/up/allimg/4k/s/02/210925000GaM1-0-lp.jpg",
-                    "http://vjs.zencdn.net/v/oceans.mp4"
-
+                    "https://media.w3.org/2010/05/sintel/trailer.mp4"
                 )
             )
         }

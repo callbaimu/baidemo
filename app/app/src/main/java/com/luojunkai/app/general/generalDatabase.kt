@@ -1,6 +1,5 @@
 package com.luojunkai.app.general
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -15,9 +14,6 @@ abstract class generalDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: generalDatabase? = null
 
-        fun getViewModel(application: Application): generalViewModel {
-            return generalViewModel(generalDatabase.getDatabase(application).generalDao(), application)
-        }
         fun getDatabase(context: Context): generalDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
