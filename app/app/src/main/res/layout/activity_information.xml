@@ -56,6 +56,7 @@
         app:layout_constraintTop_toBottomOf="@id/information"
         android:background="@drawable/radius_border">
 
+        <!-- 显示相机预览的取景器视图 -->
 
     <TextView
             android:id="@+id/hintnick"

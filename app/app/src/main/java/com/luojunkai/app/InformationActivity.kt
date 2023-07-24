@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.luojunkai.app.databinding.ActivityInformationBinding // 引入 View Binding 类
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Environment
 import android.util.Log
@@ -34,15 +35,6 @@ class InformationActivity : AppCompatActivity() {
     private lateinit var commitButton: Button // 添加 commitButton 变量
     private var capturedImageUri: Uri? = null // 添加 capturedImageUri 变量
     private val requiredPermissions = arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            selectImageFromCameraOrGallery()
-        } else {
-            // 相机权限被拒绝
-            // 这里你可以给出一个提示或其他处理
-        }
-    }
 
     private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
@@ -123,29 +115,27 @@ class InformationActivity : AppCompatActivity() {
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (intent.resolveActivity(packageManager) != null) {
-            // 创建用于保存照片的临时文件
-            val photoFile: File? = try {
-                createImageFile()
+            try {
+                val photoFile: File? = createImageFile()
+                photoFile?.let {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        this,
+                        "com.luojunkai.app.fileprovider",  // 这里需要替换为你的 FileProvider authority
+                        it
+                    )
+                    capturedImageUri = photoURI // 设置拍摄的照片URI给 capturedImageUri 变量
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    takePictureLauncher.launch(intent)
+                }
             } catch (ex: IOException) {
                 // 处理文件创建失败的情况
-                null
-            }
-
-            // 继续只有当文件创建成功时，才进行拍照
-            photoFile?.let {
-                val photoURI: Uri = FileProvider.getUriForFile(
-                    this,
-                    "com.luojunkai.app.fileprovider",  // 这里需要替换为你的 FileProvider authority
-                    it
-                )
-                capturedImageUri = photoURI // 将图片的 URI 设置给 capturedImageUri 变量
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                takePictureLauncher.launch(intent)
+                Log.e("InformationActivity", "Error creating image file", ex)
             }
         } else {
-            Log.d("DEBUG", "No camera app found")
+            Log.d("InformationActivity", "No camera app found")
         }
     }
+
 
 
     // 创建用于保存照片的临时文件
@@ -175,16 +165,16 @@ class InformationActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_PICK || requestCode == REQUEST_IMAGE_CAPTURE) {
-                // 处理从相册选择或拍照的图片
-                // 使用 capturedImageUri 获取拍照后的图片 URI
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                // 处理从相机拍照的图片
                 val imageUri: Uri? = capturedImageUri
-                // 在这里你可以将头像设置为选择的图片
-                if (imageUri != null) {
-                    binding.avatar.setImageURI(imageUri)
+                // 在这里检查 capturedImageUri 的值，确保图片的URI正确保存
+                Log.d("InformationActivity", "Captured image URI: $imageUri")
 
-                    // 将图片的 URI 设置给 capturedImageUri 变量（此处已在 openCamera 方法中设置，此处可忽略）
-                    // capturedImageUri = imageUri
+                // 在这里您可以将头像设置为拍摄的图片
+                if (imageUri != null) {
+                    // 将图片的 URI 设置给 capturedImageUri 变量
+                    capturedImageUri = imageUri
 
                     // 将头像地址保存到 Room 数据库
                     lifecycleScope.launch(Dispatchers.IO) {
@@ -196,9 +186,11 @@ class InformationActivity : AppCompatActivity() {
                             userDatabase.userDao().insertOrUpdateUser(updatedUser)
                         }
                     }
+
+                    // 设置头像图片
+                    binding.avatar.setImageURI(imageUri)
                 }
             }
         }
     }
-
 }
