@@ -72,7 +72,16 @@ class InformationActivity : AppCompatActivity() {
             }
         }
 
+        // 获取从AddNewsActivity传递的数据
+        val nickname = intent.getStringExtra("nickname")
+        val avatarUrl = intent.getStringExtra("avatarUrl")
 
+        // 将头像URL显示在头像ImageView上
+        if (avatarUrl != null && avatarUrl.isNotEmpty()) {
+            val imageUri = Uri.parse(avatarUrl)
+            binding.avatar.setImageURI(imageUri)
+            capturedImageUri = imageUri // 将头像URL赋值给capturedImageUri
+        }
     }
 
     // 添加请求拍照或选择照片的常量
@@ -124,7 +133,7 @@ class InformationActivity : AppCompatActivity() {
                         it
                     )
                     capturedImageUri = photoURI // 设置拍摄的照片URI给 capturedImageUri 变量
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+
                     takePictureLauncher.launch(intent)
                 }
             } catch (ex: IOException) {
@@ -135,6 +144,7 @@ class InformationActivity : AppCompatActivity() {
             Log.d("InformationActivity", "No camera app found")
         }
     }
+
 
 
 
@@ -172,6 +182,31 @@ class InformationActivity : AppCompatActivity() {
                 Log.d("InformationActivity", "Captured image URI: $imageUri")
 
                 // 在这里您可以将头像设置为拍摄的图片
+                if (imageUri != null) {
+                    // 将图片的 URI 设置给 capturedImageUri 变量
+                    capturedImageUri = imageUri
+
+                    // 将头像地址保存到 Room 数据库
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val userDatabase = UserDatabase.getDatabase(applicationContext)
+                        val userId = 1 // 假设用户ID为1
+                        val user = userDatabase.userDao().getUser(userId)
+                        user?.let {
+                            val updatedUser = User(it.uid, 0, imageUri.toString(), it.nickname)
+                            userDatabase.userDao().insertOrUpdateUser(updatedUser)
+                        }
+                    }
+
+                    // 设置头像图片
+                    binding.avatar.setImageURI(imageUri)
+                }
+            } else if (requestCode == REQUEST_IMAGE_PICK) {
+                // 处理从相册选择的图片
+                val imageUri: Uri? = data?.data
+                // 在这里检查 imageUri 的值，确保图片的URI正确保存
+                Log.d("InformationActivity", "Selected image URI: $imageUri")
+
+                // 在这里您可以将头像设置为选择的图片
                 if (imageUri != null) {
                     // 将图片的 URI 设置给 capturedImageUri 变量
                     capturedImageUri = imageUri
