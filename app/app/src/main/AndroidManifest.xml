@@ -9,7 +9,6 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
@@ -40,28 +39,33 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:windowSoftInputMode="adjustPan"
+        android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".Weather"
+            android:name=".home.weather.WeatherActivity"
             android:exported="true"
             android:label="Weather Activity" />
         <activity
-            android:name=".AddNewsActivity"
+            android:name=".home.general.AddNewsActivity"
             android:exported="true"
             android:label="AddNews Activity"/>
         <activity
-            android:name=".VideoPlayerActivity"
+            android:name=".video.VideoPlayerActivity"
             android:exported="true"
             android:label="Video Player Activity"/>
         <activity
-            android:name=".InformationActivity"
+            android:name=".user.User.InformationActivity"
             android:launchMode="standard"
             android:exported="true"
             android:label="Information Activity"/>
+        <activity
+            android:name=".home.web.WebSearchActivity"
+            android:exported="true"
+            android:label="Web Search Activity"/>
     </application>
 </manifest>

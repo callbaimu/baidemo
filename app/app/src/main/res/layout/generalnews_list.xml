@@ -72,4 +72,13 @@
         app:layout_constraintVertical_bias="0.448"
         app:srcCompat="@drawable/ic_fire" />
 
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        android:text="id"
+        app:layout_constraintStart_toEndOf="@+id/tv_from"
+        app:layout_constraintTop_toTopOf="@+id/tv_from" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
